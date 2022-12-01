@@ -1,0 +1,13 @@
+---
+import Layout from "../layouts/Layout.astro";
+import ComponentContainer from "../components/ComponentContainer";
+import HelloWorld from "../components/showcase/HelloWorld";
+---
+
+<Layout title="Welcome to Astro.">
+  <div>
+    <ComponentContainer day={0} name="Hello, World!">
+      <HelloWorld />
+    </ComponentContainer>
+  </div>
+</Layout>

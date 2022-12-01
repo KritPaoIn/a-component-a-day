@@ -1,0 +1,91 @@
+---
+import Layout from "../layouts/Layout.astro";
+import {
+  RightArrowIcon,
+  GithubIcon,
+  AstroIcon,
+  ReactIcon,
+  TailwindIcon,
+} from "../components/Icon";
+---
+
+<Layout title="A Component a Day for a Year">
+  <div
+    class="flex flex-col-reverse md:flex-row max-w-3xl justify-center items-center mx-auto gap-8 px-6 md:py-24 py-16"
+  >
+    <div
+      class="flex flex-col gap-4 mx-auto items-center justify-center max-w-xs flex-1 md:items-start"
+    >
+      <h1 class="md:text-4xl text-2xl font-extrabold text-center md:text-left">
+        A Component a Day for a Year
+      </h1>
+      <a
+        class="group cursor-pointer font-bold md:text-left text-center"
+        href="https://github.com/KritPaoIn"
+        target="_blank"
+      >
+        By <span class="group-hover:underline group-hover:text-accent-secondary"
+          >KritPaoIn</span
+        >
+        <GithubIcon />
+      </a>
+      <p class="text-center md:text-left">
+        A static site dedicated to showcasing my New Year's resolution of making
+        one react component per day for a year.
+      </p>
+      <a
+        class="text-accent flex items-center gap-2 hover:text-accent-secondary hover:tracking-wide transition-all"
+        href="/components"
+      >
+        See all components
+        <RightArrowIcon />
+      </a>
+    </div>
+    <div
+      class="flex flex-col mx-auto flex-1 max-w-[14rem] border border-primary rounded-md md:max-w-[18rem] shadow-sm w-full"
+    >
+      <div
+        class="bg-primary p-2 w-full rounded-t-md border-b border-primary text-xs"
+      >
+        Preview
+      </div>
+      <div
+        class="flex justify-center items-center w-full bg-terniary aspect-square rounded-b-md"
+      >
+        No previews found
+      </div>
+    </div>
+  </div>
+  <div
+    class="bg-primary border-y border-primary p-5 shadow-sm text-center md:text-left"
+  >
+    <div class="max-w-2xl flex flex-col mx-auto">
+      <section class="my-10">
+        <h2 class="text-2xl my-4">Powered by</h2>
+        <div class="flex flex-wrap justify-center gap-10 m-10">
+          <a
+            class="flex w-[10rem] h-[10rem] justify-center items-center bg-primary hover:bg-secondary transition-colors rounded-lg shadow-sm border border-primary"
+            href="https://astro.build"
+            target="_blank"
+          >
+            <AstroIcon />
+          </a>
+          <a
+            class="flex w-[10rem] h-[10rem] justify-center items-center bg-primary hover:bg-secondary transition-colors rounded-lg shadow-sm border border-primary"
+            href="https://reactjs.org"
+            target="_blank"
+          >
+            <ReactIcon />
+          </a>
+          <a
+            class="flex w-[10rem] h-[10rem] justify-center items-center bg-primary hover:bg-secondary transition-colors rounded-lg shadow-sm border border-primary"
+            href="https://tailwindcss.com"
+            target="_blank"
+          >
+            <TailwindIcon />
+          </a>
+        </div>
+      </section>
+    </div>
+  </div>
+</Layout>

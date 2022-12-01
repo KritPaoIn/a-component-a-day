@@ -1,0 +1,103 @@
+---
+import Header from "../components/Header";
+import Footer from "../components/Footer";
+
+export interface Props {
+  title: string;
+}
+
+const { title } = Astro.props;
+const { pathname } = Astro.url;
+---
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <Header pathname={pathname} />
+    <main class="pt-[4rem]">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style is:global>
+  @tailwind base;
+  @tailwind components;
+  @tailwind utilities;
+
+  html {
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+      Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  }
+
+  code {
+    font-family: Menlo, Monaco, Lucida Console, Liberation Mono,
+      DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace;
+  }
+
+  @layer base {
+    body {
+      @apply bg-neutral-100;
+      @apply text-neutral-500;
+      @apply dark:text-slate-300;
+      @apply dark:bg-slate-800;
+    }
+
+    h1,
+    h2,
+    h3 {
+      @apply text-neutral-700;
+      @apply dark:text-white;
+    }
+
+    h1 {
+      @apply font-extrabold;
+    }
+
+    h2 {
+      @apply font-bold;
+    }
+  }
+
+  @layer components {
+    .bg-primary {
+      @apply bg-white;
+      @apply dark:bg-slate-900;
+    }
+    .bg-secondary {
+      @apply bg-neutral-100;
+      @apply dark:bg-slate-800;
+    }
+    .bg-terniary {
+      @apply bg-neutral-200;
+      @apply dark:bg-slate-700;
+    }
+    .border-primary {
+      @apply border-neutral-300;
+      @apply dark:border-slate-600;
+    }
+    .fill-text {
+      @apply fill-neutral-500;
+      @apply dark:fill-slate-300;
+    }
+    .text-accent {
+      @apply text-blue-500;
+      @apply dark:text-orange-500;
+    }
+    .text-unaccent {
+      @apply text-neutral-200;
+      @apply dark:text-slate-700;
+    }
+    .text-accent-secondary {
+      @apply text-blue-400;
+      @apply dark:text-orange-400;
+    }
+  }
+</style>
