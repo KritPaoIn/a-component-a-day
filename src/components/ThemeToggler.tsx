@@ -17,7 +17,7 @@ const ThemeToggler = () => {
       if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
         document
           .querySelector("meta[name='theme-color']")
-          ?.setAttribute("content", "#404040");
+          ?.setAttribute("content", "#3C82F6");
       } else {
         document
           .querySelector("meta[name='theme-color']")

@@ -6,7 +6,7 @@ interface NavItem {
 
 const navItems: NavItem[] = [
   { label: "Home", page: "/" },
-  { label: "Components", page: "/components" },
+  { label: "Components", page: "/components/" },
 ];
 
 interface HeaderProps {
