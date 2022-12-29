@@ -10,6 +10,25 @@ const { title } = Astro.props;
 const { pathname } = Astro.url;
 ---
 
+<script is:inline>
+  const theme = (() => {
+    if (typeof localStorage !== "undefined" && localStorage.getItem("theme")) {
+      return localStorage.getItem("theme");
+    }
+    if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+      return "dark";
+    }
+    return "light";
+  })();
+
+  if (theme === "light") {
+    document.documentElement.classList.remove("dark");
+  } else {
+    document.documentElement.classList.add("dark");
+  }
+  window.localStorage.setItem("theme", theme);
+</script>
+
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -17,9 +36,10 @@ const { pathname } = Astro.url;
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <meta name="theme-color" />
   </head>
   <body>
-    <Header pathname={pathname} />
+    <Header client:load pathname={pathname} />
     <main class="pt-[4rem]">
       <slot />
     </main>
@@ -75,7 +95,7 @@ const { pathname } = Astro.url;
       @apply bg-neutral-100;
       @apply dark:bg-slate-800;
     }
-    .bg-terniary {
+    .bg-tertiary {
       @apply bg-neutral-200;
       @apply dark:bg-slate-700;
     }

@@ -1,12 +1,12 @@
+import ThemeToggler from "./ThemeToggler";
 interface NavItem {
   label: string;
-  page: string;
+  page?: string;
 }
 
 const navItems: NavItem[] = [
   { label: "Home", page: "/" },
   { label: "Components", page: "/components" },
-  { label: "About", page: "/about" },
 ];
 
 interface HeaderProps {
@@ -15,9 +15,9 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ pathname }) => {
   return (
-    <header className="bg-primary border-primary fixed flex w-full items-center justify-center border-b py-5 px-3 shadow-sm">
-      <div className="w-full max-w-md">
-        <nav className="flex w-full items-center justify-center gap-3">
+    <header className="bg-primary border-primary fixed flex w-full items-center justify-center border-b py-4 px-6 shadow-sm">
+      <div className="flex w-full max-w-2xl items-center  justify-between gap-3">
+        <nav className="flex w-full max-w-[18rem] items-center justify-center gap-3">
           {navItems.map(({ label, page }) => {
             return (
               <a
@@ -34,6 +34,7 @@ const Header: React.FC<HeaderProps> = ({ pathname }) => {
             );
           })}
         </nav>
+        <ThemeToggler />
       </div>
     </header>
   );
