@@ -1,6 +1,6 @@
 const Footer = () => {
   return (
-    <footer>
+    <footer className="bg-secondary">
       <div className="p-10">
         <p className="text-center text-sm">
           © 2023 Krit Pao-in. All rights reserved.

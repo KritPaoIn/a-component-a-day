@@ -25,7 +25,7 @@ const Header: React.FC<HeaderProps> = ({ pathname }) => {
                   pathname === page
                     ? "bg-secondary text-accent font-bold"
                     : "hover:bg-secondary hover:text-accent"
-                } border-primary flex-1 rounded-md border py-0.5 text-center text-sm  shadow-sm transition-colors`}
+                } border-primary flex-1 rounded-md border py-0.5 text-center text-sm  shadow-sm`}
                 key={label}
                 href={page}
               >
