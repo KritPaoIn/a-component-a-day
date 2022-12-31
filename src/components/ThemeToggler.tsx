@@ -10,13 +10,13 @@ const ThemeToggler = () => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
       document
-        .querySelector('meta[name="theme-color"]')
+        .querySelector("meta[name='theme-color']")
         ?.setAttribute("content", "#0f172a");
     } else {
       document.documentElement.classList.remove("dark");
       document
-        .querySelector('meta[name="theme-color"]')
-        ?.setAttribute("content", "#ffffff");
+        .querySelector("meta[name='theme-color']")
+        ?.setAttribute("content", "#fffffe");
     }
     localStorage.setItem("theme", theme);
   }, [theme]);

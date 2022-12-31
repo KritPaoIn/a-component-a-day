@@ -10,7 +10,7 @@ const ComponentContainer: React.FC<ComponentContainerProps> = ({
   children,
 }) => {
   return (
-    <section className="bg-primary border-primary border-b">
+    <section className="bg-secondary border-primary border-b">
       <div className="mx-auto max-w-3xl">
         <h2 className="text-unaccent p-6 text-center text-xl font-bold md:text-left">
           Day {day} - {name}
