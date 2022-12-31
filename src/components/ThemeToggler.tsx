@@ -10,19 +10,13 @@ const ThemeToggler = () => {
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
       document
-        .querySelector("meta[name='theme-color']")
-        ?.setAttribute("content", "#0F172A");
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", "#0f172a");
     } else {
       document.documentElement.classList.remove("dark");
-      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document
-          .querySelector("meta[name='theme-color']")
-          ?.setAttribute("content", "#3C82F6");
-      } else {
-        document
-          .querySelector("meta[name='theme-color']")
-          ?.setAttribute("content", "#FFFFFF");
-      }
+      document
+        .querySelector('meta[name="theme-color"]')
+        ?.setAttribute("content", "#ffffff");
     }
     localStorage.setItem("theme", theme);
   }, [theme]);

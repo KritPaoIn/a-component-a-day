@@ -27,11 +27,14 @@ const { pathname } = Astro.url;
 
     if (theme === "light") {
       document.documentElement.classList.remove("dark");
+      document
+        .querySelector('meta[name="theme-color"]')
+        .setAttribute("content", "#ffffff");
     } else {
       document.documentElement.classList.add("dark");
       document
         .querySelector('meta[name="theme-color"]')
-        .setAttribute("content", "#0F172A");
+        .setAttribute("content", "#0f172a");
     }
     localStorage.setItem("theme", theme);
   } catch (_) {}
@@ -41,9 +44,9 @@ const { pathname } = Astro.url;
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <meta name="theme-color" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" />
     <title>{title}</title>
   </head>
   <body>
@@ -72,10 +75,10 @@ const { pathname } = Astro.url;
 
   @layer base {
     body {
-      @apply bg-neutral-100;
+      @apply bg-neutral-200;
       @apply text-neutral-500;
-      @apply dark:text-slate-300;
       @apply dark:bg-slate-800;
+      @apply dark:text-slate-300;
     }
 
     h1,
