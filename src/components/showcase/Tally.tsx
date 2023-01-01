@@ -34,6 +34,25 @@ const DownIcon = () => {
   );
 };
 
+const ResetIcon = () => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth={1.5}
+      stroke="currentColor"
+      className="group-hover:text-accent h-6 w-6"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99"
+      />
+    </svg>
+  );
+};
+
 type NumberProps = {
   count: number;
 };
@@ -50,7 +69,7 @@ const position = {
   bottom: "BOTTOM",
 };
 
-let currentPosition = position.middle;
+// let currentPosition = position.middle;
 
 const Tally = () => {
   const [isMounted, setIsMounted] = useState(false);
@@ -58,6 +77,7 @@ const Tally = () => {
   const [count, setCount] = useState(
     Number(localStorage.getItem("tally")) ?? 0
   );
+  const [currentPosition, setCurrentPosition] = useState(position.middle);
   const [bottomFactor, setBottomFactor] = useState(count + 1);
 
   useEffect(() => {
@@ -66,7 +86,8 @@ const Tally = () => {
       setQueue([count + 1, count, count - 1]);
       setBottomFactor(count + 1);
     }
-  }, []);
+    localStorage.setItem("tally", String(count));
+  }, [count]);
 
   const handleIncrement: MouseEventHandler = () => {
     if (queue === null) return;
@@ -76,14 +97,13 @@ const Tally = () => {
         queue.pop();
         setBottomFactor((prev) => prev + 1);
       } else if (currentPosition === position.bottom) {
-        currentPosition = position.middle;
+        setCurrentPosition(position.middle);
         queue.unshift(prev + 2);
         setBottomFactor((prev) => prev + 1);
       } else if (currentPosition === position.middle) {
-        currentPosition = position.top;
+        setCurrentPosition(position.top);
         queue.pop();
       }
-      localStorage.setItem("tally", String(prev + 1));
       return prev + 1;
     });
   };
@@ -92,24 +112,30 @@ const Tally = () => {
     if (queue === null) return;
     setCount((prev) => {
       if (currentPosition === position.top) {
-        currentPosition = position.middle;
+        setCurrentPosition(position.middle);
         queue.push(prev - 2);
       } else if (currentPosition === position.bottom) {
         queue.push(prev - 1);
         queue.shift();
         setBottomFactor((prev) => prev - 1);
       } else if (currentPosition === position.middle) {
-        currentPosition = position.bottom;
+        setCurrentPosition(position.bottom);
         queue.shift();
         setBottomFactor((prev) => prev - 1);
       }
-      localStorage.setItem("tally", String(prev - 1));
       return prev - 1;
     });
   };
 
+  const handleReset: MouseEventHandler = () => {
+    setCount(0);
+    setCurrentPosition(position.middle);
+    setQueue([1, 0, -1]);
+    setBottomFactor(1);
+  };
+
   return (
-    <div className="border-primary bg-primary flex flex-col items-center gap-6 rounded-3xl border py-12 px-16 shadow-md">
+    <div className="border-primary bg-primary flex flex-col items-center gap-6 rounded-3xl border px-16 pt-12 pb-6 shadow-md">
       <div className="bg-secondary border-primary h-20 w-20 overflow-hidden rounded-3xl border text-2xl shadow-inner">
         {isMounted && (
           <div
@@ -128,17 +154,20 @@ const Tally = () => {
       <div className="flex flex-col gap-2">
         <button
           onClick={handleIncrement}
-          className="border-primary hover:bg-secondary bg-primary group rounded-md border py-1 px-4 shadow-sm"
+          className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border py-1 px-4 shadow-sm"
         >
           <UpIcon />
         </button>
         <button
           onClick={handleDecrement}
-          className="border-primary hover:bg-secondary bg-primary group rounded-md border px-4 py-1 shadow-sm"
+          className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border px-4 py-1 shadow-sm"
         >
           <DownIcon />
         </button>
       </div>
+      <button onClick={handleReset} className="group">
+        <ResetIcon />
+      </button>
     </div>
   );
 };
