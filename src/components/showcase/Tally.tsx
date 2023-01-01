@@ -42,7 +42,7 @@ const ResetIcon = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="group-hover:text-accent h-6 w-6 transition-transform duration-500 group-hover:rotate-180"
+      className="group-hover:text-accent h-6 w-6 transition-transform duration-500 group-hover:rotate-180 motion-reduce:transition-none"
     >
       <path
         strokeLinecap="round"
@@ -135,37 +135,42 @@ const Tally = () => {
   };
 
   return (
-    <div className="border-primary bg-primary flex flex-col items-center gap-6 rounded-3xl border px-16 pt-12 pb-6 shadow-md">
-      <div className="bg-secondary border-primary h-20 w-20 overflow-hidden rounded-3xl border text-2xl shadow-inner">
-        {isMounted && (
-          <div
-            style={{
-              transform: `translateY(${count * 100}%)`,
-              bottom: `${bottomFactor * 100}%`,
-            }}
-            className="pointer-events-none relative h-full text-center transition-transform"
+    <div className="">
+      <div className="border-primary bg-primary flex w-72 flex-col items-center gap-6 rounded-t-3xl border border-b-0 py-12">
+        <div className="bg-secondary border-primary h-20 w-20 overflow-hidden rounded-3xl border text-2xl shadow-inner">
+          {isMounted && (
+            <div
+              style={{
+                transform: `translateY(${count * 100}%)`,
+                bottom: `${bottomFactor * 100}%`,
+              }}
+              className="pointer-events-none relative h-full text-center transition-transform"
+            >
+              {queue?.map((num) => {
+                return <NumberItem key={num} count={num} />;
+              })}
+            </div>
+          )}
+        </div>
+        <div className="flex flex-col gap-2">
+          <button
+            onClick={handleIncrement}
+            className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border py-1 px-4 shadow-sm"
           >
-            {queue?.map((num) => {
-              return <NumberItem key={num} count={num} />;
-            })}
-          </div>
-        )}
+            <UpIcon />
+          </button>
+          <button
+            onClick={handleDecrement}
+            className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border px-4 py-1 shadow-sm"
+          >
+            <DownIcon />
+          </button>
+        </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <button
-          onClick={handleIncrement}
-          className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border py-1 px-4 shadow-sm"
-        >
-          <UpIcon />
-        </button>
-        <button
-          onClick={handleDecrement}
-          className="border-primary hover:bg-secondary bg-primary group grid place-items-center rounded-md border px-4 py-1 shadow-sm"
-        >
-          <DownIcon />
-        </button>
-      </div>
-      <button onClick={handleReset} className="group p-1">
+      <button
+        onClick={handleReset}
+        className="border-primary bg-primary hover:bg-secondary group grid w-full place-items-center rounded-b-3xl border py-3 shadow-md"
+      >
         <ResetIcon />
       </button>
     </div>
