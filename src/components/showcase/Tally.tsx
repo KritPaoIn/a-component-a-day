@@ -42,7 +42,7 @@ const ResetIcon = () => {
       viewBox="0 0 24 24"
       strokeWidth={1.5}
       stroke="currentColor"
-      className="group-hover:text-accent h-6 w-6"
+      className="group-hover:text-accent h-6 w-6 transition-transform duration-500 group-hover:rotate-180"
     >
       <path
         strokeLinecap="round"
@@ -165,7 +165,7 @@ const Tally = () => {
           <DownIcon />
         </button>
       </div>
-      <button onClick={handleReset} className="group">
+      <button onClick={handleReset} className="group p-1">
         <ResetIcon />
       </button>
     </div>
