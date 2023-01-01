@@ -10,12 +10,12 @@ const ComponentContainer: React.FC<ComponentContainerProps> = ({
   children,
 }) => {
   return (
-    <section className="bg-secondary border-primary border-b">
-      <div className="mx-auto max-w-3xl">
-        <h2 className="text-unaccent p-6 text-center text-xl font-bold md:text-left">
+    <section className="bg-primary border-primary border-b">
+      <div className="bg-primary mx-auto max-w-3xl pb-20 md:px-6">
+        <h2 className="text-secondary p-6 text-center md:text-left">
           Day {day} - {name}
         </h2>
-        <div className="flex items-center justify-center pb-24 pt-6">
+        <div className="border-primary bg-secondary flex items-center justify-center border-y py-12 shadow-inner md:rounded-3xl md:border-x">
           {children}
         </div>
       </div>
