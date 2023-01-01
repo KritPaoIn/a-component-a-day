@@ -6,7 +6,9 @@ const ThemeToggler = () => {
   const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    if (!isMounted) {
+      setIsMounted(true);
+    }
     if (theme === "dark") {
       document.documentElement.classList.add("dark");
       document
@@ -14,6 +16,7 @@ const ThemeToggler = () => {
         ?.setAttribute("content", "#0f172a");
     } else {
       document.documentElement.classList.remove("dark");
+      // Safari toolbar color breaks when using #ffffff when toggling between themes, so use #fffffe instead.
       document
         .querySelector("meta[name='theme-color']")
         ?.setAttribute("content", "#fffffe");

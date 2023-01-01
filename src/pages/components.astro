@@ -1,13 +1,13 @@
 ---
 import Layout from "../layouts/Layout.astro";
 import ComponentContainer from "../components/ComponentContainer";
-import HelloWorld from "../components/showcase/HelloWorld";
+import Tally from "../components/showcase/Tally";
 ---
 
 <Layout title="A Component a Day for a Year | Components">
   <div>
-    <ComponentContainer day={0} name="Hello, World!">
-      <HelloWorld />
+    <ComponentContainer day={1} name="Tally">
+      <Tally client:visible />
     </ComponentContainer>
   </div>
 </Layout>
