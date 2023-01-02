@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 
 const isNumeric = (value: string) => {
   return /^\d$/.test(value);
@@ -16,6 +16,24 @@ const Calculator = () => {
   const [lastResult, setLastResult] = useState<null | string>(null);
   const [resetNext, setResetNext] = useState(true);
   const [operator, setOperator] = useState<null | keyof typeof operators>(null);
+  const [copied, setCopied] = useState(false);
+  const [copiedTimeout, setCopiedTimeout] = useState<null | ReturnType<
+    typeof setTimeout
+  >>(null);
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(result === null ? "0" : result);
+    if (copiedTimeout !== null) {
+      clearTimeout(copiedTimeout);
+    }
+    setCopied(true);
+    setCopiedTimeout(
+      setTimeout(() => {
+        setCopied(false);
+        setCopiedTimeout(null);
+      }, 1000)
+    );
+  };
 
   const handleInput = (symbol: string) => {
     if (isNumeric(symbol)) {
@@ -111,7 +129,16 @@ const Calculator = () => {
   return (
     <div className="flex flex-col items-center gap-4">
       <div className="bg-primary border-primary overflow-hidden rounded-xl border text-lg shadow-lg">
-        <button className="border-primary hover:bg-secondary flex h-20 w-full items-center justify-center border-b">
+        <button
+          onClick={handleCopy}
+          className="border-primary hover:bg-secondary flex h-20 w-full items-center justify-center border-b"
+        >
+          <p
+            style={{ opacity: `${copied ? "100%" : "0%"}` }}
+            className="pointer-events-none absolute rounded-full bg-black/20 p-2 text-white backdrop-blur transition-opacity"
+          >
+            Copied to clipboard
+          </p>
           <p className="text-primary w-full max-w-[10ch] overflow-x-hidden text-right text-3xl">
             {result === null ? 0 : result}
           </p>
