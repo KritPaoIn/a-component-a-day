@@ -74,6 +74,9 @@ const Calculator = () => {
       if (operator !== null) {
         handleCalculate();
       }
+      if (result === null) {
+        setResult("0");
+      }
       setResetNext(true);
       setOperator(symbol as keyof typeof operators);
     }
