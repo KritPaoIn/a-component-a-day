@@ -295,7 +295,7 @@ const Calculator = () => {
           </button>
           <button
             onClick={handleCalculate}
-            className="bg-accent border-primary h-14 w-14 border-l text-white"
+            className="bg-accent border-primary hover:bg-accent-hover h-14 w-14 border-l text-white"
           >
             =
           </button>
