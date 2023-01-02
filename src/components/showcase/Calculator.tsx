@@ -31,7 +31,7 @@ const Calculator = () => {
           );
         }
       } else {
-        if (lastResult === null) {
+        if (lastResult === null || resetNext) {
           setLastResult(result);
           setResult(() => symbol);
           setResetNext(false);
@@ -53,6 +53,10 @@ const Calculator = () => {
         return prev;
       });
     } else if (operators.hasOwnProperty(symbol)) {
+      if (operator !== null) {
+        handleCalculate();
+      }
+      setResetNext(true);
       setOperator(symbol as keyof typeof operators);
     }
   };
