@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import ComponentContainer from "../components/ComponentContainer";
 import Tally from "../components/showcase/Tally";
 import Calculator from "../components/showcase/Calculator";
+import AnalogClock from "../components/showcase/AnalogClock";
 ---
 
 <Layout title="A Component a Day for a Year | Components">
@@ -12,6 +13,9 @@ import Calculator from "../components/showcase/Calculator";
     </ComponentContainer>
     <ComponentContainer day={2} name="Calculator">
       <Calculator client:visible />
+    </ComponentContainer>
+    <ComponentContainer day={3} name="Analog Clock">
+      <AnalogClock client:visible />
     </ComponentContainer>
   </div>
 </Layout>
