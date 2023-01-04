@@ -4,6 +4,7 @@ import ComponentContainer from "../components/ComponentContainer";
 import Tally from "../components/showcase/Tally";
 import Calculator from "../components/showcase/Calculator";
 import AnalogClock from "../components/showcase/AnalogClock";
+import WordOfTheDay from "../components/showcase/WordOfTheDay";
 ---
 
 <Layout title="A Component a Day for a Year | Components">
@@ -16,6 +17,9 @@ import AnalogClock from "../components/showcase/AnalogClock";
     </ComponentContainer>
     <ComponentContainer day={3} name="Analog Clock">
       <AnalogClock client:visible />
+    </ComponentContainer>
+    <ComponentContainer day={4} name="Word of the Day">
+      <WordOfTheDay />
     </ComponentContainer>
   </div>
 </Layout>

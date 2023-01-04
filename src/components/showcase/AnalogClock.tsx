@@ -1,6 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-const TICK = (2 * Math.PI) / 60;
+const TICK = 6;
 const RADIUS = 8;
 
 const Hands = () => {
@@ -9,41 +9,42 @@ const Hands = () => {
   const [hours, setHours] = useState(0);
 
   useEffect(() => {
-    setInterval(() => {
+    const interval = setInterval(() => {
       const t = new Date();
-      const newSeconds = t.getSeconds() + t.getMilliseconds() / 1000;
+
+      const newSeconds = t.getSeconds() + 1 + t.getMilliseconds() / 1000;
       const newMinutes = t.getMinutes() + newSeconds / 60.0;
       const newHours = (t.getHours() % 12) + newMinutes / 60;
       setSeconds(newSeconds);
       setMinutes(newMinutes);
       setHours(newHours);
-    }, 100);
+    }, 121);
+    return () => {
+      clearInterval(interval);
+    };
   }, []);
   return (
     <div className="relative">
       <div
         style={{
-          transform: `translateX(-50%) rotate(${seconds * TICK}rad)`,
-          transformOrigin: "bottom",
+          transform: `translateX(-50%) rotate(${seconds * TICK}deg)`,
           height: `${RADIUS * 0.85}rem`,
         }}
-        className="bg-accent absolute bottom-1/2 left-1/2 w-0.5 rounded-full"
+        className="bg-accent absolute bottom-1/2 left-1/2 w-0.5 origin-bottom rounded-full"
       />
       <div
         style={{
-          transform: `translateX(-50%) rotate(${minutes * TICK}rad)`,
-          transformOrigin: "bottom",
+          transform: `translateX(-50%) rotate(${minutes * TICK}deg)`,
           height: `${RADIUS * 0.85}rem`,
         }}
-        className="bg-text-primary absolute left-1/2 bottom-1/2 w-1 rounded-full"
+        className="bg-text-primary absolute left-1/2 bottom-1/2 w-1 origin-bottom rounded-full"
       />
       <div
         style={{
-          transform: `translateX(-50%) rotate(${5 * hours * TICK}rad)`,
-          transformOrigin: "bottom",
+          transform: `translateX(-50%) rotate(${5 * hours * TICK}deg)`,
           height: `${RADIUS * 0.6}rem`,
         }}
-        className="bg-text-primary absolute left-1/2 bottom-1/2 w-1 rounded-full"
+        className="bg-text-primary absolute left-1/2 bottom-1/2 w-1 origin-bottom rounded-full"
       />
       <div className="bg-text-primary absolute left-1/2 bottom-1/2 h-3 w-3 -translate-x-1/2 translate-y-1/2 rounded-full" />
     </div>
