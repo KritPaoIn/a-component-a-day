@@ -153,6 +153,7 @@ const Piano = () => {
     const noteInfo = notesInfo[target.id];
     if (noteInfo === undefined) return;
 
+    e.preventDefault();
     sound.play(noteInfo.frequency);
     setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
   };
@@ -164,6 +165,7 @@ const Piano = () => {
     const noteInfo = notesInfo[target.id];
     if (noteInfo === undefined) return;
 
+    e.preventDefault();
     sound.stop(noteInfo.frequency);
     setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
   };
