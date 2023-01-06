@@ -147,7 +147,6 @@ const Piano = () => {
   };
 
   const handleTouchStart = (e: TouchEvent) => {
-    e.preventDefault();
     const target = e.target as HTMLElement;
     if (target === null) return;
 
@@ -159,7 +158,6 @@ const Piano = () => {
   };
 
   const handleTouchEnd = (e: TouchEvent) => {
-    e.preventDefault();
     const target = e.target as HTMLElement;
     if (target === null) return;
 
