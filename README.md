@@ -1,5 +1,5 @@
-# A Component a Day for a Year
+# React Components
 
-A static site dedicated to showcasing my New Year's resolution of making one react component a day for a year.
+A static site dedicated to showcasing my React components.
 
-Check out the website here: https://a-component-a-day.vercel.app
+Check out the website here: https://react-components.vercel.app
