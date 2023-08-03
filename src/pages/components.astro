@@ -6,24 +6,44 @@ import Calculator from "../components/showcase/Calculator";
 import AnalogClock from "../components/showcase/AnalogClock";
 import WordOfTheDay from "../components/showcase/WordOfTheDay";
 import Piano from "../components/showcase/Piano";
+import Checklist from "../components/showcase/Checklist";
+import MusicPlayer from "../components/showcase/MusicPlayer";
+import Dropdown from "../components/showcase/Dropdown";
+import SwipeCard from "../components/showcase/SwipeCard";
+import Weather from "../components/showcase/Weather";
 ---
 
 <Layout title="A Component a Day for a Year | Components">
   <div>
-    <ComponentContainer day={1} name="Tally">
+    <ComponentContainer name="Tally">
       <Tally client:visible />
     </ComponentContainer>
-    <ComponentContainer day={2} name="Calculator">
+    <ComponentContainer name="Calculator">
       <Calculator client:visible />
     </ComponentContainer>
-    <ComponentContainer day={3} name="Analog Clock">
-      <AnalogClock client:only />
+    <ComponentContainer name="Analog Clock">
+      <AnalogClock client:visible />
     </ComponentContainer>
-    <ComponentContainer day={4} name="Word of the Day">
+    <ComponentContainer name="Word of the Day">
       <WordOfTheDay />
     </ComponentContainer>
-    <ComponentContainer day={5} name="Piano">
+    <ComponentContainer name="Piano">
       <Piano client:only />
+    </ComponentContainer>
+    <ComponentContainer name="Checklist">
+      <Checklist client:visible />
+    </ComponentContainer>
+    <ComponentContainer name="Music Player">
+      <MusicPlayer client:visible />
+    </ComponentContainer>
+    <ComponentContainer name="Dropdown">
+      <Dropdown />
+    </ComponentContainer>
+    <ComponentContainer name="Swipe Card">
+      <SwipeCard client:visible />
+    </ComponentContainer>
+    <ComponentContainer name="Weather">
+      <Weather />
     </ComponentContainer>
   </div>
 </Layout>
