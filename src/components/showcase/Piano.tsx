@@ -127,53 +127,54 @@ const Piano = () => {
     const sound = new Sound();
 
     const handleMouseDown = (e: MouseEvent) => {
-      e.preventDefault();
       const target = e.target as HTMLElement;
       if (target === null) return;
 
       const noteInfo = notesInfo[target.id];
       if (noteInfo) {
+        e.preventDefault();
         sound.play(noteInfo.frequency);
         setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
       }
     };
 
     const handleMouseUp = (e: MouseEvent) => {
-      e.preventDefault();
       const target = e.target as HTMLElement;
       if (target === null) return;
 
       const noteInfo = notesInfo[target.id];
 
       if (noteInfo) {
+        e.preventDefault();
         sound.stop(noteInfo.frequency);
         setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
       }
     };
 
     const handleTouchStart = (e: TouchEvent) => {
-      e.preventDefault();
       const target = e.target as HTMLElement;
       if (target === null) return;
 
       const noteInfo = notesInfo[target.id];
 
       if (noteInfo) {
+        e.preventDefault();
         sound.play(noteInfo.frequency);
         setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
       }
     };
 
     const handleTouchEnd = (e: TouchEvent) => {
-      e.preventDefault();
       const target = e.target as HTMLElement;
       if (target === null) return;
 
       const noteInfo = notesInfo[target.id];
       if (noteInfo === undefined) return;
-
-      sound.stop(noteInfo.frequency);
-      setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
+      if (noteInfo) {
+        e.preventDefault();
+        sound.stop(noteInfo.frequency);
+        setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
+      }
     };
 
     const handleKeyDown = (e: KeyboardEvent) => {
