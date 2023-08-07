@@ -18,34 +18,45 @@ const notesInfo: Record<string, { frequency: number; key: string }> = {
 
 class Sound {
   audioCtx = new AudioContext();
-  oscillatorNodes: Record<number, OscillatorNode> = {};
+  nodes: Record<
+    number,
+    { oscillatorNode: OscillatorNode; gainNode: GainNode }
+  > = {};
 
   constructor() {}
 
   play = (frequency: number) => {
-    if (this.oscillatorNodes[frequency] !== undefined) return;
+    if (this.nodes[frequency] !== undefined) return;
 
     const oscillatorNode = this.audioCtx.createOscillator();
-    oscillatorNode.frequency.value = frequency;
+    const gainNode = new GainNode(this.audioCtx, { gain: 0.1 });
+    oscillatorNode.frequency.setValueAtTime(
+      frequency,
+      this.audioCtx.currentTime
+    );
 
-    const volume = this.audioCtx.createGain();
-    volume.connect(this.audioCtx.destination);
-    volume.gain.value = 0.1;
+    oscillatorNode.connect(gainNode);
+    gainNode.connect(this.audioCtx.destination);
 
-    oscillatorNode.connect(volume);
-
-    this.oscillatorNodes[frequency] = oscillatorNode;
+    this.nodes[frequency] = { oscillatorNode, gainNode };
 
     oscillatorNode.start();
   };
 
   stop = (frequency: number) => {
-    const oscillatorNode = this.oscillatorNodes[frequency];
-    if (oscillatorNode === undefined) return;
+    if (this.nodes[frequency] === undefined) return;
 
-    oscillatorNode.stop();
+    const { oscillatorNode, gainNode } = this.nodes[frequency];
 
-    delete this.oscillatorNodes[frequency];
+    const releaseTime = this.audioCtx.currentTime + 0.1;
+    gainNode.gain.linearRampToValueAtTime(0, releaseTime);
+    oscillatorNode.stop(releaseTime);
+
+    oscillatorNode.onended = () => {
+      oscillatorNode.disconnect();
+      gainNode.disconnect();
+    };
+    delete this.nodes[frequency];
   };
 }
 
@@ -62,7 +73,7 @@ const Note: React.FC<NoteProps> = ({ note, held, notate = false }) => {
     return (
       <div
         id={note}
-        className={`relative z-10 after:absolute after:top-0 after:left-[-1rem] after:h-[6rem] after:w-[2rem] after:rounded-b-md  after:bg-neutral-800 after:text-center dark:after:bg-slate-100  ${
+        className={`relative z-10 cursor-pointer after:absolute after:left-[-1rem] after:top-0 after:h-[6rem] after:w-[2rem]  after:rounded-b-md after:bg-neutral-800 dark:after:bg-slate-100  ${
           held
             ? "after:bg-neutral-500 dark:after:bg-slate-400"
             : "after:bg-neutral-800 hover:after:bg-neutral-600 dark:after:bg-slate-100 dark:hover:after:bg-slate-300"
@@ -81,7 +92,7 @@ const Note: React.FC<NoteProps> = ({ note, held, notate = false }) => {
   return (
     <div
       id={note}
-      className={`border-primary relative grid h-[10rem] w-[3rem] border-r last:border-r-0 ${
+      className={`border-primary relative grid h-[10rem] w-[3rem] cursor-pointer border-r last:border-r-0 ${
         held ? "bg-tertiary" : "bg-primary hover:bg-secondary"
       }`}
     >
@@ -97,7 +108,6 @@ const Note: React.FC<NoteProps> = ({ note, held, notate = false }) => {
 };
 
 const Piano = () => {
-  const sound = new Sound();
   const [keyboardEnabled, _setKeyboardEnabled] = useState(false);
 
   const keyboardEnabledRef = useRef(keyboardEnabled);
@@ -106,112 +116,106 @@ const Piano = () => {
     _setKeyboardEnabled(data);
   };
 
-  const [noteHeld, setNoteHeld] = useState<Record<string, boolean>>({
-    C4: false,
-    "C#4": false,
-    D4: false,
-    "D#4": false,
-    E4: false,
-    F4: false,
-    "F#4": false,
-    G4: false,
-    "G#4": false,
-    A4: false,
-    "A#4": false,
-    B4: false,
-    C5: false,
-  });
-
-  const handleMouseDown = (e: MouseEvent) => {
-    e.preventDefault();
-    const target = e.target as HTMLElement;
-    if (target === null) return;
-
-    const noteInfo = notesInfo[target.id];
-    if (noteInfo === undefined) return;
-
-    sound.play(noteInfo.frequency);
-    setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
-  };
-
-  const handleMouseUp = (e: MouseEvent) => {
-    e.preventDefault();
-    const target = e.target as HTMLElement;
-    if (target === null) return;
-
-    const noteInfo = notesInfo[target.id];
-    if (noteInfo === undefined) return;
-
-    sound.stop(noteInfo.frequency);
-    setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
-  };
-
-  const handleTouchStart = (e: TouchEvent) => {
-    const target = e.target as HTMLElement;
-    if (target === null) return;
-
-    const noteInfo = notesInfo[target.id];
-    if (noteInfo === undefined) return;
-
-    e.preventDefault();
-    sound.play(noteInfo.frequency);
-    setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
-  };
-
-  const handleTouchEnd = (e: TouchEvent) => {
-    const target = e.target as HTMLElement;
-    if (target === null) return;
-
-    const noteInfo = notesInfo[target.id];
-    if (noteInfo === undefined) return;
-
-    e.preventDefault();
-    sound.stop(noteInfo.frequency);
-    setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
-  };
-
-  const handleKeyDown = (e: KeyboardEvent) => {
-    if (!keyboardEnabledRef.current) return;
-    if (sound === null) return;
-    if (e.repeat) return;
-
-    let noteInfo: { note: string; frequency: number } | null = null;
-
-    for (const [note, { frequency, key }] of Object.entries(notesInfo)) {
-      if (key === e.key) {
-        noteInfo = { note, frequency };
-      }
-    }
-
-    if (noteInfo === null) return;
-
-    sound.play(noteInfo.frequency);
-    setNoteHeld((prev) =>
-      noteInfo ? { ...prev, [noteInfo.note]: true } : prev
-    );
-  };
-
-  const handleKeyUp = (e: KeyboardEvent) => {
-    if (sound === null) return;
-    if (e.repeat) return;
-
-    let noteInfo: { note: string; frequency: number } | null = null;
-
-    for (const [note, { frequency, key }] of Object.entries(notesInfo)) {
-      if (key === e.key) {
-        noteInfo = { note, frequency };
-      }
-    }
-
-    if (noteInfo === null) return;
-
-    sound.stop(noteInfo.frequency);
-    setNoteHeld((prev) =>
-      noteInfo ? { ...prev, [noteInfo.note]: false } : prev
-    );
-  };
+  const [noteHeld, setNoteHeld] = useState<Record<string, boolean>>(
+    Object.keys(notesInfo).reduce(
+      (acc, note) => ({ ...acc, [note]: false }),
+      {}
+    )
+  );
 
   useEffect(() => {
+    const sound = new Sound();
+
+    const handleMouseDown = (e: MouseEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      if (target === null) return;
+
+      const noteInfo = notesInfo[target.id];
+      if (noteInfo) {
+        sound.play(noteInfo.frequency);
+        setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
+      }
+    };
+
+    const handleMouseUp = (e: MouseEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      if (target === null) return;
+
+      const noteInfo = notesInfo[target.id];
+
+      if (noteInfo) {
+        sound.stop(noteInfo.frequency);
+        setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
+      }
+    };
+
+    const handleTouchStart = (e: TouchEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      if (target === null) return;
+
+      const noteInfo = notesInfo[target.id];
+
+      if (noteInfo) {
+        sound.play(noteInfo.frequency);
+        setNoteHeld((prev) => ({ ...prev, [target.id]: true }));
+      }
+    };
+
+    const handleTouchEnd = (e: TouchEvent) => {
+      e.preventDefault();
+      const target = e.target as HTMLElement;
+      if (target === null) return;
+
+      const noteInfo = notesInfo[target.id];
+      if (noteInfo === undefined) return;
+
+      sound.stop(noteInfo.frequency);
+      setNoteHeld((prev) => ({ ...prev, [target.id]: false }));
+    };
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (!keyboardEnabledRef.current) return;
+      if (sound === null) return;
+      if (e.repeat) return;
+
+      let noteInfo: { note: string; frequency: number } | null = null;
+
+      for (const [note, { frequency, key }] of Object.entries(notesInfo)) {
+        if (key === e.key) {
+          noteInfo = { note, frequency };
+        }
+      }
+
+      if (noteInfo) {
+        sound.play(noteInfo.frequency);
+        setNoteHeld((prev) =>
+          noteInfo ? { ...prev, [noteInfo.note]: true } : prev
+        );
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (sound === null) return;
+      if (e.repeat) return;
+
+      let noteInfo: { note: string; frequency: number } | null = null;
+
+      for (const [note, { frequency, key }] of Object.entries(notesInfo)) {
+        if (key === e.key) {
+          noteInfo = { note, frequency };
+        }
+      }
+
+      if (noteInfo) {
+        sound.stop(noteInfo.frequency);
+        setNoteHeld((prev) =>
+          noteInfo ? { ...prev, [noteInfo.note]: false } : prev
+        );
+      }
+    };
     addEventListener("keydown", handleKeyDown);
     addEventListener("keyup", handleKeyUp);
     addEventListener("mousedown", handleMouseDown);
@@ -250,7 +254,7 @@ const Piano = () => {
         onClick={() => {
           setKeyboardEnabled(!keyboardEnabled);
         }}
-        className="bg-accent hidden w-40 rounded-full py-1  text-white shadow-sm sm:block"
+        className="bg-accent hover:bg-accent-hover hidden w-40 rounded-full py-1 text-white shadow-sm sm:block"
       >
         {keyboardEnabled ? "Disable" : "Enable"} keyboard
       </button>
